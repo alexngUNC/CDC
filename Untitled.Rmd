@@ -22,6 +22,7 @@ location=read_csv("/Users/fanyiyang/Desktop/CDC/StormEvents_locations-ftp_v1.0_d
 ```
 
 ```{r}
+summary(detail)
 detail2=detail%>%
   separate(DAMAGE_PROPERTY,into=c("prop_damage","k"),sep="K")%>%
   mutate(prop_damage=as.numeric(prop_damage)*1000)%>%
@@ -30,5 +31,13 @@ detail2=detail%>%
 detail2$prop_damage[is.na(detail2$prop_damage)]=0
 detail2$crop_damage[is.na(detail2$crop_damage)]=0
 write_csv(detail2,"details.csv")
+```
+```{r}
+state_stats=read_csv("/Users/fanyiyang/Desktop/CDC/csvData.csv" )%>%
+  mutate(STATE=toupper(State))
+detail3=detail2%>%
+  left_join(state_stats,by="STATE")
+detail3$Density
+write_csv(detail3,"detail3.csv")
 ```
 
