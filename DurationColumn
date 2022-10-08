@@ -1,0 +1,26 @@
+# Change month from letters to numbers
+detail2$BEGIN_DATE_TIME <- str_replace_all(detail2$BEGIN_DATE_TIME, "JAN", "01")
+detail2$BEGIN_DATE_TIME <- str_replace_all(detail2$BEGIN_DATE_TIME, "FEB", "02")
+detail2$BEGIN_DATE_TIME <- str_replace_all(detail2$BEGIN_DATE_TIME, "MAR", "03")
+detail2$BEGIN_DATE_TIME <- str_replace_all(detail2$BEGIN_DATE_TIME, "APR", "04")
+detail2$BEGIN_DATE_TIME <- str_replace_all(detail2$BEGIN_DATE_TIME, "MAY", "05")
+detail2$BEGIN_DATE_TIME <- str_replace_all(detail2$BEGIN_DATE_TIME, "JUN", "06")
+
+# Change month from letters to numbers
+detail2$END_DATE_TIME <- str_replace_all(detail2$END_DATE_TIME, "JAN", "01")
+detail2$END_DATE_TIME <- str_replace_all(detail2$END_DATE_TIME, "FEB", "02")
+detail2$END_DATE_TIME <- str_replace_all(detail2$END_DATE_TIME, "MAR", "03")
+detail2$END_DATE_TIME <- str_replace_all(detail2$END_DATE_TIME, "APR", "04")
+detail2$END_DATE_TIME <- str_replace_all(detail2$END_DATE_TIME, "MAY", "05")
+detail2$END_DATE_TIME <- str_replace_all(detail2$END_DATE_TIME, "JUN", "06")
+
+# Duration calculation using difftime
+typeof(detail2$END_DATE_TIME[1])
+difftime(detail2$END_DATE_TIME[1], detail2$BEGIN_DATE_TIME[1], units="mins")
+
+# Add a duration column
+detail3 <- detail2 %>%
+  mutate(duration = difftime(as.POSIXct(END_DATE_TIME), as.POSIXct(BEGIN_DATE_TIME), units = "mins"))
+
+# Remove space and minutes so duration is only numeric
+detail3$duration <- as.numeric(detail3$duration)
