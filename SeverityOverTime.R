@@ -118,3 +118,40 @@ hugeDataset_tidy$prop_damage[is.na(hugeDataset_tidy$prop_damage)]=0
 hugeDataset_tidy$crop_damage[is.na(hugeDataset_tidy$crop_damage)]=0
 hugeDataset_tidy$total_damage=hugeDataset_tidy$prop_damage+hugeDataset_tidy$crop_damage
 names(hugeDataset_tidy)
+
+hugeDataset_tidy <- read.csv("hugeDataset_tidy.csv")
+
+casOverTime <- hugeDataset_tidy%>%
+  filter(casualty>0)%>%
+  group_by(year)%>%
+  mutate(mean_casualty=mean(casualty))%>%
+  ggplot()+
+  geom_point(aes(y=mean_casualty,x=year), color="steelblue") +
+  ggtitle("Average Casualties Per Year Over Time") +
+  xlab("Year") +
+  ylab("Mean Casualties")
+ggsave("casOverTime.png", casOverTime, "png")
+
+meanDamageOverTime <- hugeDataset_tidy%>%
+  filter(total_damage>0)%>%
+  group_by(year)%>%
+  mutate(mean_total_damage=mean(total_damage))%>%
+  ggplot()+
+  geom_line(aes(y=mean_total_damage,x=year), color="tomato3", size=0.8) + 
+  ggtitle("Average Damage Per Year Over Time") +
+  xlab("Year") + 
+  ylab("Mean Damage")
+ggsave("damageOverTime.png", meanDamageOverTime, "png")
+
+meanMagOverTime <- hugeDataset_tidy%>%
+  filter(MAGNITUDE>0)%>%
+  group_by(year)%>%
+  mutate(mean_magnitude=mean(MAGNITUDE))%>%
+  ggplot()+
+  geom_line(aes(y=mean_magnitude,x=year), color="slateblue3") + 
+  xlab("Year") + ylab("Mean Magnitude") + ggtitle("Mean Magnitude Per Year Over Time")
+ggsave("magOverTime.png", meanMagOverTime, "png")
+
+greaterThan100Cas <- filter(hugeDataset_tidy,casualty>=100)
+summary(greaterThan100Cas)
+tail(greaterThan100Cas$year)
